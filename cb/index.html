@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>授權完成</title>
+<style>
+  body { font-family: system-ui, "Noto Sans TC", sans-serif; background: #f6f3ee; color: #2b2b2b; margin: 0; padding: 32px 16px; }
+  main { max-width: 480px; margin: 0 auto; }
+  h1 { font-size: 22px; }
+  p { font-size: 17px; line-height: 1.6; }
+  textarea { width: 100%; box-sizing: border-box; height: 120px; font-size: 14px; padding: 8px; word-break: break-all; }
+  button { margin-top: 12px; width: 100%; padding: 14px; font-size: 18px; border: 0; border-radius: 8px; background: #2f4a3a; color: #fff; }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="t">授權完成</h1>
+  <p id="m">請按下面的按鈕複製，<b>1 小時內</b>用 LINE 傳給老闆就好。</p>
+  <textarea id="c" readonly></textarea>
+  <button id="b" type="button">複製</button>
+</main>
+<script>
+  // Shows the OAuth ?code= so the owner can paste it into the local setup tool; nothing is sent anywhere.
+  var q = new URLSearchParams(location.search);
+  var code = (q.get("code") || "").replace(/#_$/, "");
+  var src = q.get("state") || "";
+  var box = document.getElementById("c");
+  if (!code) {
+    document.getElementById("t").textContent = "沒有收到授權";
+    document.getElementById("m").textContent = "請把這個畫面截圖傳給老闆。";
+    box.value = q.get("error_description") || q.get("error") || "";
+  } else {
+    box.value = (src ? src + ":" : "") + code;
+  }
+  document.getElementById("b").onclick = function () {
+    box.select();
+    (navigator.clipboard ? navigator.clipboard.writeText(box.value) : Promise.reject()).catch(function () { document.execCommand("copy"); });
+    this.textContent = "已複製";
+  };
+</script>
+</body>
+</html>
