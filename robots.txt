@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /cb/
+Disallow: /go/
 Sitemap: https://linda.tw-hy.us/sitemap.xml
